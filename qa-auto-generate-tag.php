@@ -19,13 +19,14 @@ class qa_auto_generate_tag
 			$tags = $tagsel->get_tags($category, $params['title'], $params['content']);
 			if (count($tags) > 0) {
 				$oldquestion = agt_db_client::get_oldquestion($params['postid']);
+				$text = qa_post_content_to_text($oldquestion['content'], $oldquestion['format']);
 				qa_question_set_content($oldquestion, $oldquestion['title'],
 									$oldquestion['content'], $oldquestion['format'],
-									$oldquestion['text'], qa_tags_to_tagstring($tags),
+									$text, qa_tags_to_tagstring($tags),
 									$oldquestion['notify'], $userid, $handle,
-									$cookieid, $null, null, false, false);
+									$cookieid, null, null, false, false);
 			} else {
-				error_log('No Tags postid: '. $params['postid']);
+				error_log('Did not match a tag. postid: '. $params['postid']);
 			}
 		}
 	}
