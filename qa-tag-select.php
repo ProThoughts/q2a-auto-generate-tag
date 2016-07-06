@@ -5,6 +5,8 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
+require_once QA_PLUGIN_DIR.'q2a-auto-generate-tag/agt-db-client.php';
+
 class qa_tag_select
 {
 	const TAG_STRING = 'tag_string';
@@ -63,7 +65,7 @@ class qa_tag_select
 	{
 		$tags = array();
 		if (isset($categoryid)) {
-			$category = $this->get_category_title($categoryid);
+			$category = agt_db_client::get_category_title($categoryid);
 		} else {
 			$category = '';
 		}
@@ -95,16 +97,6 @@ class qa_tag_select
 			$conditions[] = $tmp;
 		}
 		$this->conditions = $conditions;
-	}
-
-	private function get_category_title($categoryid = null)
-	{
-		$title = '';
-		$categories = qa_db_single_select(qa_db_full_category_selectspec($categoryid, true));
-		if (isset($categories['title'])) {
-			$title = $categories['title'];
-		}
-		return $title;
 	}
 
 	private function is_category_match($incategory = '', $cond = array())
