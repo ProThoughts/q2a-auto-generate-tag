@@ -5,8 +5,6 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
-require_once QA_PLUGIN_DIR.'q2a-auto-generate-tag/agt-db-client.php';
-
 class qa_tag_select
 {
 	const TAG_STRING = 'tag_string';
@@ -61,14 +59,9 @@ class qa_tag_select
 		$this->file = null;
 	}
 
-	public function get_tags($categoryid = null, $title = null, $content = null)
+	public function get_tags($category = null, $title = null, $content = null)
 	{
 		$tags = array();
-		if (isset($categoryid)) {
-			$category = agt_db_client::get_category_title($categoryid);
-		} else {
-			$category = '';
-		}
 		foreach ($this->conditions as $cond) {
 			if ($this->is_category_match($category, $cond)) {
 				$tags[] = $cond[self::TAG_STRING];
