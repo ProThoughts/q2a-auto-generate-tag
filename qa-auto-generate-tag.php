@@ -9,15 +9,18 @@ class qa_auto_generate_tag
 	{
 
 		if (qa_using_tags() && $event === 'q_post') {
-			error_log($params['name']);
 			$tagsel = new qa_tag_select();
 			$tags = $tagsel->get_tags($params['categoryid'], $params['title'], $params['content']);
-
-			$oldquestion = $this->get_oldquestion($params['postid']);
-			qa_question_set_content($oldquestion, $oldquestion['title'],
-			 $oldquestion['content'], $oldquestion['format'],
-			 $oldquestion['text'], qa_tags_to_tagstring($tags),
-			 $oldquestion['notify'], $userid, $handle, $cookieid, $null, null, false, false);
+			if (count($tags) > 0) {
+				$oldquestion = $this->get_oldquestion($params['postid']);
+				qa_question_set_content($oldquestion, $oldquestion['title'],
+									$oldquestion['content'], $oldquestion['format'],
+									$oldquestion['text'], qa_tags_to_tagstring($tags),
+									$oldquestion['notify'], $userid, $handle,
+									$cookieid, $null, null, false, false);
+			} else {
+				error_log('No Tags postid: '. $params['postid']);
+			}
 		}
 	}
 
