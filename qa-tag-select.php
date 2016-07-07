@@ -17,28 +17,19 @@ class qa_tag_select
 	const KEY_STA = 3;
 	const KEY_END = 9;
 
-	public $file;
 	public $lines;
 	public $conditions;
 
 	public function __construct()
 	{
-		$this->file = null;
 		$this->lines = array();
 		$filepath = QA_PLUGIN_DIR.'q2a-auto-generate-tag/tag.csv';
 		if (!file_exists($filepath)) {
 			error_log($filepath . ' file is not found!');
 			return;
 		};
+		$this->read_csv($filepath);
 
-		$this->file = new SplFileObject($filepath);
-		$this->file->setFlags(SplFileObject::READ_CSV);
-
-		foreach ($this->file as $line) {
-			if (isset($line[0])) {
-				$this->lines[] = $line;
-			}
-		}
 		if (count($this->lines) > 0) {
 			$this->parse_condition();
 		}
@@ -52,11 +43,6 @@ class qa_tag_select
 	public function get_conditions()
 	{
 		return $this->conditions;
-	}
-
-	public function __destruct()
-	{
-		$this->file = null;
 	}
 
 	public function get_tags($category = null, $title = null, $content = null)
@@ -114,5 +100,24 @@ class qa_tag_select
 			}
 		}
 		return false;
+	}
+
+	private function read_csv($filepath)
+	{
+
+		// ロケールの設定
+		// echo setlocale(LC_ALL, '0') . "\n"; // 現在のロケールを確認
+		setlocale(LC_ALL, 'ja_JP.UTF-8');
+
+		$file = new SplFileObject($filepath);
+		$file->setFlags(SplFileObject::READ_CSV);
+
+		foreach ($file as $line) {
+			if (isset($line[0])) {
+				$this->lines[] = $line;
+			}
+		}
+		$file = null;
+		setlocale(LC_ALL, '');	// 元に戻す
 	}
 }
