@@ -10,7 +10,7 @@ class qa_tag_select
 	const TAG_STRING = 'tag_string';
 	const CATEGORIES = 'categories';
 	const KEYWORDS = 'title';
-	const KEYWORDS2 = 'titlecontent'
+	const KEYWORDS2 = 'titlecontent';
 
 	const TAG_STA = 0;
 	const CAT_STA = 1;
@@ -18,7 +18,7 @@ class qa_tag_select
 	const KEY_STA = 3;
 	const KEY_END = 12;
 	const KEY2_STA = 13;
-	const KEY2_END = 22
+	const KEY2_END = 22;
 
 	public $lines;
 	public $conditions;
@@ -79,7 +79,7 @@ class qa_tag_select
 			for ($k = self::KEY_STA; $k <= self::KEY_END; $k++) {
 				$tmp[self::KEYWORDS][] = $line[$k];
 			}
-			for ($n = self::KEY_STA; $n <= self::KEY_END; $n++) {
+			for ($n = self::KEY2_STA; $n <= self::KEY2_END; $n++) {
 				$tmp[self::KEYWORDS2][] = $line[$n];
 			}
 			$conditions[] = $tmp;
