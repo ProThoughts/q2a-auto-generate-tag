@@ -9,13 +9,16 @@ class qa_tag_select
 {
 	const TAG_STRING = 'tag_string';
 	const CATEGORIES = 'categories';
-	const KEYWORDS = 'keywords';
+	const KEYWORDS = 'title';
+	const KEYWORDS2 = 'titlecontent';
 
 	const TAG_STA = 0;
 	const CAT_STA = 1;
 	const CAT_END = 2;
 	const KEY_STA = 3;
-	const KEY_END = 9;
+	const KEY_END = 12;
+	const KEY2_STA = 13;
+	const KEY2_END = 22;
 
 	public $lines;
 	public $conditions;
@@ -53,6 +56,9 @@ class qa_tag_select
 				$tags[] = $cond[self::TAG_STRING];
 				continue;
 			}
+			if ($this->is_title_match($title, $cond)) {
+				$tags[] = $cond[self::TAG_STRING];
+			}
 			if ($this->is_keywords_match($title, $content, $cond)) {
 				$tags[] = $cond[self::TAG_STRING];
 			}
@@ -73,6 +79,9 @@ class qa_tag_select
 			for ($k = self::KEY_STA; $k <= self::KEY_END; $k++) {
 				$tmp[self::KEYWORDS][] = $line[$k];
 			}
+			for ($n = self::KEY2_STA; $n <= self::KEY2_END; $n++) {
+				$tmp[self::KEYWORDS2][] = $line[$n];
+			}
 			$conditions[] = $tmp;
 		}
 		$this->conditions = $conditions;
@@ -88,9 +97,22 @@ class qa_tag_select
 		return false;
 	}
 
-	private function is_keywords_match($intitle = '', $incontent = '', $cond = array())
+	private function is_title_match($intitle = '', $cond = array())
 	{
 		foreach ($cond[self::KEYWORDS] as $word) {
+			if (empty($word)) {
+				continue;
+			}
+			if (isset($intitle) && strpos($intitle, $word) !== false) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private function is_keywords_match($intitle = '', $incontent = '', $cond = array())
+	{
+		foreach ($cond[self::KEYWORDS2] as $word) {
 			if (empty($word)) {
 				continue;
 			}
@@ -104,7 +126,6 @@ class qa_tag_select
 
 	private function read_csv($filepath)
 	{
-
 		// ロケールの設定
 		// echo setlocale(LC_ALL, '0') . "\n"; // 現在のロケールを確認
 		setlocale(LC_ALL, 'ja_JP.UTF-8');
