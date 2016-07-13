@@ -112,12 +112,13 @@ class qa_tag_select
 
 	private function is_keywords_match($intitle = '', $incontent = '', $cond = array())
 	{
+		$incontent = mb_substr($incontent, 0, 100, 'UTF-8');
 		foreach ($cond[self::KEYWORDS2] as $word) {
 			if (empty($word)) {
 				continue;
 			}
-			if ((isset($intitle) && strpos($intitle, $word) !== false) ||
-				(isset($incontent) && strpos($incontent, $word) !== false)) {
+			if ((isset($intitle) && mb_strpos($intitle, $word) !== false) ||
+				(isset($incontent) && mb_strpos($incontent, $word) !== false)) {
 				return true;
 			}
 		}
