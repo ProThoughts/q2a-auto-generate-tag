@@ -117,8 +117,8 @@ class qa_tag_select
 			if (empty($word)) {
 				continue;
 			}
-			if ((isset($intitle) && mb_strpos($intitle, $word) !== false) ||
-				(isset($incontent) && mb_strpos($incontent, $word) !== false)) {
+			if ((isset($intitle) && mb_strpos($intitle, $word, 0, 'UTF-8') !== false) ||
+				(isset($incontent) && mb_strpos($incontent, $word, 0, 'UTF-8') !== false)) {
 				return true;
 			}
 		}
