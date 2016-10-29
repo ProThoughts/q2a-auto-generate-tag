@@ -90,7 +90,7 @@ class qa_tag_select
 	private function is_category_match($incategory = '', $cond = array())
 	{
 		foreach ($cond[self::CATEGORIES] as $cat) {
-			if ($incategory === $cat) {
+			if (!empty($incategory) && $incategory === $cat) {
 				return true;
 			}
 		}
